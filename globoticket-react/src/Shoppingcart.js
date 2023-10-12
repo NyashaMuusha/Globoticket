@@ -12,10 +12,12 @@ export default function Shoppingcart() {
     let updateCart = () => {
         const state = CartStore.getState();
         if (state) {
-            const cart = state.cart;
-            const totalAmount = state.cart.reduce((p, n) => p + n.quantity * n.price, 0);
-            setCart(cart);
-            setTotalAmount(totalAmount);
+            state.then((state) => {
+                const cart = state.cart;
+                const totalAmount = state.cart.reduce((p, n) => p + n.quantity * n.price, 0);
+                setCart(cart);
+                setTotalAmount(totalAmount);
+            })
         }
     };
 
@@ -33,33 +35,33 @@ export default function Shoppingcart() {
 
     return (
         <div className="container" id="carttable">
-        <table className="table mt-5">
-            <thead>
-                <tr>
-                    <th scope="col">Event</th>
-                    <th scope="col">Price</th>
-                    <th scope="col"># Tickets</th>
-                    <th scope="col">Total</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                { 
-                    cart.map(item => (
-                      <Shoppingcartitem event={item} key={item.id} />
-                    ))
-                }
-            </tbody>
-            <tfoot>
-                <tr className="align-middle">
-                    <td colSpan="5" className="text-center">
-                        <button type="button" id="btnOrder"
-                            onClick={handleOrderClick}
-                            className="btn btn-primary btn-primary-themed btn-md font-upper">Order for ${ totalAmount }</button>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+            <table className="table mt-5">
+                <thead>
+                    <tr>
+                        <th scope="col">Event</th>
+                        <th scope="col">Price</th>
+                        <th scope="col"># Tickets</th>
+                        <th scope="col">Total</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        cart.map(item => (
+                            <Shoppingcartitem event={item} key={item.id} />
+                        ))
+                    }
+                </tbody>
+                <tfoot>
+                    <tr className="align-middle">
+                        <td colSpan="5" className="text-center">
+                            <button type="button" id="btnOrder"
+                                onClick={handleOrderClick}
+                                className="btn btn-primary btn-primary-themed btn-md font-upper">Order for ${totalAmount}</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     );
-  }
+}
