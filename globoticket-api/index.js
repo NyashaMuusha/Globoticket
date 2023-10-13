@@ -27,12 +27,12 @@ app.use(
 app.get("/events", (req, res) => {
     let sql = "SELECT * FROM event ORDER BY date ASC";
     db.all(sql, (err, rows) => {
-        if (req.query.page && 
-            !isNaN(parseInt(req.query.page)) && 
+        if (req.query.page &&
+            !isNaN(parseInt(req.query.page)) &&
             parseInt(req.query.page) > 0) {
-            const hasMore = rows.length > pageSize * parseInt(req.query.page); 
+            const hasMore = rows.length > pageSize * parseInt(req.query.page);
             rows = rows.slice(pageSize * (parseInt(req.query.page) - 1), pageSize * parseInt(req.query.page));
-            res.send({ hasMore: hasMore, rows: rows});
+            res.send({ hasMore: hasMore, rows: rows });
         } else {
             res.send(rows);
         }
@@ -54,8 +54,8 @@ app.post("/cart", jsonParser, (req, res) => {
     if (req.header("X-SESSION-TOKEN") && req.body.id) {
         let sql = "SELECT COUNT(*) as count FROM cartitem WHERE uuid = ? AND event_id = ?";
         db.get(
-            sql, 
-            [req.header("X-SESSION-TOKEN"), parseInt(req.body.id)], 
+            sql,
+            [req.header("X-SESSION-TOKEN"), parseInt(req.body.id)],
             (err, row) => {
                 let cnt = row.count;
                 if (cnt === 0) {
@@ -76,7 +76,7 @@ app.post("/cart", jsonParser, (req, res) => {
 });
 
 app.patch("/cart", jsonParser, (req, res) => {
-    if (req.header("X-SESSION-TOKEN") && 
+    if (req.header("X-SESSION-TOKEN") &&
         req.body.id && req.body.quantity) {
         sql = "UPDATE cartitem SET quantity = ? WHERE uuid = ? AND event_id = ?";
         db.run(
